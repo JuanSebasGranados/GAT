@@ -1,10 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="{{ url_for('static', filename='jquery-1.11.1.min.js') }}"></script>
-  <meta charset="UTF-8">
-  <title>Decision Making Results</title>
-  <script type="text/javascript">
+    <title>Decision Making Results</title>
+    {% include "header.html" %}
+    <link href="{{ url_for('static', filename='css/vizStyle.css') }}" rel="stylesheet">
+    <!--<script src="{{url_for('static', filename='js/jquery-1.11.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/custom.frontend.js')}}"></script>-->
+    <script type="text/javascript">
+        function get(id) {
+            return document.getElementById(id);
+        }
+        function openHelp(source) {
+            get("help").style.display = "block";
+        }
+        function closeHelp(source) {
+            get("help").style.display = "none";
+        }
+        // target elements with the "draggable" class
+        interact('.draggable')
+            .draggable({
+                // enable inertial throwing
+                inertia: true,
+                // keep the element within the area of it's parent
+                restrict: {
+                    restriction: "parent",
+                    endOnly: true,
+                    elementRect: {top: 0, left: 0, bottom: 1, right: 1}
+                },
+                // enable autoScroll
+                autoScroll: true,
+
+                // call this function on every dragmove event
+                onmove: dragMoveListener,
+                // call this function on every dragend event
+                onend: function (event) {
+                    var textEl = event.target.querySelector('p');
+
+                    textEl && (textEl.textContent =
+                        'moved a distance of '
+                        + (Math.sqrt(event.dx * event.dx +
+                            event.dy * event.dy) | 0) + 'px');
+                }
+            });
+
+        function dragMoveListener(event) {
+            var target = event.target,
+                // keep the dragged position in the data-x/data-y attributes
+                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+            // translate the element
+            target.style.webkitTransform =
+                target.style.transform =
+                    'translate(' + x + 'px, ' + y + 'px)';
+
+            // update the posiion attributes
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+        }
+
+        // this is used later in the resizing and gesture demos
+        window.dragMoveListener = dragMoveListener;
+        interact('.resize-drag-outer')
+            .draggable({
+                onmove: window.dragMoveListener
+            })
+            .allowFrom('.resize-drag')
+            .resizable({
+                preserveAspectRatio: true,
+                edges: {left: true, right: true, bottom: true, top: true}
+            })
+            .on('resizemove', function (event) {
+                var target = event.target,
+                    x = (parseFloat(target.getAttribute('data-x')) || 0),
+                    y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+                // update the element's style
+                target.style.width = event.rect.width + 'px';
+                target.style.height = event.rect.height + 'px';
+
+                // translate when resizing from top or left edges
+                x += event.deltaRect.left;
+                y += event.deltaRect.top;
+
+                target.style.webkitTransform = target.style.transform =
+                    'translate(' + x + 'px,' + y + 'px)';
+
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+            });
+    </script>
+
+    <script>
     $(document).ready(function () {
       setTimeout(getUpdate, 1000);
     });
@@ -31,16 +119,209 @@
       });
       setTimeout(getUpdate, 1000);
     }
-  </script>
+    </script>
 </head>
-<body>
-<textarea
-    readonly
-    name="decision_making_output"
-    id="output"
-    rows="10"
-    cols="70"
-    style="display:inline; overflow-y: scroll;">
-</textarea>
-</body>
+
+<style>
+    * {
+        font-size: 100%;
+        font-family: Segoe UI;
+    }
+
+    #output {
+        margin: 0px 0px;
+    }
+
+
+    #NE_titles {
+        position: relative;
+        display: block;
+        margin-bottom: 3px;
+        font-weight: bold;
+        line-height: 1;
+        font-family: Segoe, "Segoe UI";
+        color: white;
+    }
+
+
+</style>
+
+<script>
+    function show1() {
+        $('#nlp_modal').modal('show');
+        $('#sna_modal').modal('hide');
+        $('#gsa_modal').modal('hide');
+    }
+
+    function show2() {
+        $('#nlp_modal').modal('hide');
+        $('#sna_modal').modal('show');
+        $('#gsa_modal').modal('hide');
+    }
+
+    function show3() {
+        $('#nlp_modal').modal('hide');
+        $('#sna_modal').modal('hide');
+        $('#gsa_modal').modal('show');
+    }
+    function openurl(link) {
+        window.open(link);
+    }
+
+</script>
+
+
+<body class="resize-container">
+<section class="blur">
+    <!-- dropdown menu
+        The buttons will have to become buttons, indeed-->
+    <div class="wrapperul" align="center">
+        <ul>
+            <li class="dropdown contains-image">
+                <a href="{{ url_for('upload_blueprint.upload', case_num = case_num) }}"><img
+                        src="{{ url_for('static', filename='GATLogo.svg') }}" alt="hermes logo"></a>
+            </li>
+            <li class="dropdown" onclick="show1()">
+                <a href="#" class="dropbtn">NLP</a>
+            </li>
+            <li class="dropdown" onclick="show2()">
+                <a href="#" class="dropbtn">SNA</a>
+            </li>
+            <li class="dropdown" onclick="show3()">
+                <a href="#" class="dropbtn">GSA</a>
+            </li>
+            <li class="dropdown align-right">
+                <a href="#" class="dropbtn"><i class="fa fa-question-circle fa-lg"></i></a>
+                <div class="dropdown-content">
+                    <a href="#" onClick="openHelp(this)">GSA Output Help</a>
+                    <a href="{{ url_for('info_blueprint.help', case_num = case_num) }}">Help Page</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+
+        function get(id) {
+            return document.getElementById(id);
+        }
+
+        function openHelp(source) {
+            get("help").style.display = "block";
+        }
+
+        function closeHelp(source) {
+            get("help").style.display = "none";
+        }
+        function toggleNodeSet(source) {
+            checkboxes = document.getElementsByClassName("nodeset");
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+        function toggleSrcSet(source) {
+            checkboxes = document.getElementsByClassName("srcset");
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+    </script>
+    <style>
+        table {
+            background-color: #071138;
+            border: solid white;
+            border-collapse: collapse;
+        }
+
+        table .centered {
+            text-align: center
+        }
+
+        th, td {
+            padding: 5px;
+            border-top: solid thin white;
+        }
+
+        .last td {
+            border-bottom: solid thick white;
+            border-top: none;
+        }
+
+    </style>
+
+
+    </head>
+
+    <style>
+        * {
+            font-size: 100%;
+            font-family: Segoe UI;
+        }
+
+        * {
+            font-size: 100%;
+            font-family: Segoe UI;
+        }
+
+        h3, p {
+            color: white;
+        }
+
+        .indented {
+            margin: 0 10%;
+        }
+
+        input {
+            opacity: 1;
+            position: initial;
+        }
+
+        label {
+            background: transparent;
+            padding: 0;
+        }
+
+        table {
+            color: white;
+        }
+
+        th, td {
+            text-align: center;
+            padding: none
+        }
+
+        select, input {
+            color: initial;
+        }
+
+    </style>
+
+    <body>
+    <br>
+    <div id="help" style="display:none;">
+        <button onClick="closeHelp(this)">Close Help</button>
+        <p>Each box in this section corresponds to a column in your specified spreadsheet. Each column should correspond
+            to a set of nodes, or nodeset. If you check the "is a nodeset?" box, then every value in that column will
+            represent a node in the network. If you do not, then the values in that column will be attributes of nodes
+            in the network. You may also elect to rename nodesets; the default value is the column name in the
+            spreadsheet. The next page will allow you to select which relationships between the nodesets you would like
+            to visualize and analyze.</p>
+    </div>
+
+    <div class="indented">
+        <label id="NE_titles">Progress on the scan:</label>
+        <br>
+        <textarea
+            readonly
+            name="decision_making_output"
+            id="output"
+            rows="10"
+            cols="70"
+            style="display:inline; overflow-y: scroll;">
+        </textarea>
+
+    </div>
+    {% include 'modal.html' -%}
+    </body>
 </html>

@@ -6,18 +6,28 @@
         $('#nlp_modal').modal('show');
         $('#sna_modal').modal('hide');
         $('#gsa_modal').modal('hide');
+        $('#dm_modal').modal('hide');
     }
 
     function show2() {
         $('#nlp_modal').modal('hide');
         $('#sna_modal').modal('show');
         $('#gsa_modal').modal('hide');
+        $('#dm_modal').modal('hide');
     }
 
     function show3() {
         $('#nlp_modal').modal('hide');
         $('#sna_modal').modal('hide');
         $('#gsa_modal').modal('show');
+        $('#dm_modal').modal('hide');
+    }
+
+    function show4() {
+        $('#nlp_modal').modal('hide');
+        $('#sna_modal').modal('hide');
+        $('#gsa_modal').modal('hide');
+        $('#dm_modal').modal('show');
     }
 
     function openurl(link) {
@@ -209,6 +219,45 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade slide-right" id="dm_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content-wrapper">
+            <div class="modal-content table-block"
+                 style="background: rgba(187, 222, 251, .0); border: 0px; background-repeat: no-repeat; background-position: 50% 90%; background-size: 40%;">
+
+                <div style="margin-right: 27px;">
+                    <button type="button" class="btn btn-danger btn-sm pull-right" data-dismiss="modal"><i
+                            class="fa fa-times-circle fa-2x" aria-hidden="true" style="z-index:1000;"></i>
+                    </button>
+                </div>
+                <br>
+                <div class="modal-body v-align-left text-left">
+                    <h3 style='color:white'>Decision Making Analysis</h3>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Data Input</a></h4>
+                        </div>
+                        <div class="panel-body">
+                          <form action="{{ url_for('dm_blueprint.dm_landing', case_num=case_num) }}" method=post>
+                            Number of runs needed:
+                            <br>
+                            <input type="text" name="number_of_runs">
+                            <br>
+                            <input type="submit" name="action" value="Run">
+                            <br>
+                            <input type="submit" name="action" value="Batch Run">
+                          </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
