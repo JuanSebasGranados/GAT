@@ -247,7 +247,7 @@
                             <h4 class="panel-title">Data Input</a></h4>
                         </div>
                         <div class="panel-body">
-                          <form action="{{ url_for('post_index') }}" method=post>
+                          <form action="{{ url_for('dm_blueprint.dm_landing', case_num=case_num) }}" method=post>
                             Number you runs you need:
                             <input type="text" name="number_of_runs">
                             <br>
