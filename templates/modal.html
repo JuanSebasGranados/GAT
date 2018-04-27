@@ -33,6 +33,17 @@
     function openurl(link) {
         window.open(link);
     }
+    var actorNum = 1;
+    $(document).ready(function(){
+        $("#btn1").click(function(){
+          var actor = "Actor " + actorNum
+          document.getElementById("actor").innerHTML = actor;
+          $("#formcontainer").append($("#template").html());
+          actorNum++;
+        });
+});
+
+
 </script>
 
 <style>
@@ -41,7 +52,70 @@
         -moz-filter: blur(20px);
         filter: blur(20px);
     }
+    #scroll_dm_modal{
+      overflow: scroll;
+    }
+
 </style>
+
+<div class="hide" id="template" style="display:none;">
+  <b id="actor"></b><br><br>
+  Rationality: &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="Rationality">
+  <br>
+  Risk: &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="Risk">
+  <br>
+  Emotion: &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="Emotion">
+  <br>
+  Generosity: &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="Generosity">
+  <br>
+  Particular/Holistic: &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="ParticularHolistic">
+  <br>
+  Primacy/Recency: &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="PrimacyRecency">
+  <br>
+  Routine/Creative: &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="RoutineCreative">
+  <br>
+  Initial State &nbsp; &nbsp;
+  <input type="file" name="InitialState" accept="text/csv">
+  <br>
+  Desired State &nbsp; &nbsp;
+  <input type="file" name="DesiredState" accept="text/csv">
+  <br>
+  Optional State &nbsp; &nbsp;
+  <input type="file" name="OptionalState" accept="text/csv">
+  <br>
+  Critical state (optional) &nbsp; &nbsp;
+  <input type="file" name="OptionalState" accept="text/csv">
+  <br>
+  Error of the actor &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="ActorErrors">
+  <br>
+  <hr>
+  IO Values
+  <br>
+  A &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="IOA">
+  <br>
+  B &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="IOB">
+  <br>
+  C &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="IOC">
+  <br>
+  D &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="IOD">
+  <br>
+  E &nbsp; &nbsp;
+  <input type="range" min="-1" max="1" name="IOE">
+  <br>
+  <hr>
+</div>
 
 <div class="modal fade slide-right" id="nlp_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
@@ -240,72 +314,20 @@
                     </button>
                 </div>
                 <br>
-                <div class="modal-body v-align-left text-left">
+                <div class="modal-body v-align-left text-left" id="scroll_dm_modal">
                     <h3 style='color:white'>Decision Making Analysis</h3>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">Data Input</a></h4>
                         </div>
+                        <div>
+                          <button id="btn1" style="position:center">Add Actor</button>
+                        </div>
                         <div class="panel-body">
-                          <form action="{{ url_for('dm_blueprint.dm_landing', case_num=case_num) }}" method=post>
-                            Number you runs you need:
-                            <input type="text" name="number_of_runs">
-                            <br>
-                            Rationality: &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="Rationality">
-                            <br>
-                            Risk: &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="Risk">
-                            <br>
-                            Emotion: &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="Emotion">
-                            <br>
-                            Generosity: &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="Generosity">
-                            <br>
-                            Particular/Holistic: &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="ParticularHolistic">
-                            <br>
-                            Primacy/Recency: &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="PrimacyRecency">
-                            <br>
-                            Routine/Creative: &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="RoutineCreative">
-                            <br>
-                            Initial State &nbsp; &nbsp;
-                            <input type="file" name="InitialState" accept="text/csv">
-                            <br>
-                            Desired State &nbsp; &nbsp;
-                            <input type="file" name="DesiredState" accept="text/csv">
-                            <br>
-                            Optional State &nbsp; &nbsp;
-                            <input type="file" name="OptionalState" accept="text/csv">
-                            <br>
-                            Critical state (optional) &nbsp; &nbsp;
-                            <input type="file" name="OptionalState" accept="text/csv">
-                            <br>
-                            Error of the actor &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="ActorErrors">
-                            <br>
-                            <hr>
-                            IO Values
-                            <br>
-                            A &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="IOA">
-                            <br>
-                            B &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="IOB">
-                            <br>
-                            C &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="IOC">
-                            <br>
-                            D &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="IOD">
-                            <br>
-                            E &nbsp; &nbsp;
-                            <input type="range" min="-1" max="1" name="IOE">
-                            <br>
-                            <hr>
+                          <form action= "{{ url_for('dm_blueprint.dm_landing',case_num=case_num) }}" method=post class="form1">
+                            Number you runs needed:<input type="text" name="number_of_runs"><br>
+                            <div id="formcontainer">
+                            </div>
                             <input type="submit" name="action" value="Run">
                             <input type="submit" name="action" value="Batch Run">
                           </form>
